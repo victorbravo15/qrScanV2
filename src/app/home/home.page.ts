@@ -20,15 +20,41 @@ ngAfterViewInit(): void {
   this.videoElement = this.video.nativeElement;
   
 }
-  startScan(){
+  async startScan(){
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'enviroment'}
+    });
+    this.videoElement.srcObject = stream;
+    this.videoElement.setAttribute('playsinline', true);
+    this.videoElement.play();
+  }
 
+  // Helpers functions
+
+  stopScan(){
+    this.scanActive = false;
   }
 
   reset(){
     this.scanResult = null;
   }
 
-  stopScan(){
-    this.scanActive = false;
+  async showQrToast(){
+    const toast = await this.toastCtrl.create({
+      message: `Open ${this.scanResult}?`,
+      position: 'top',
+      buttons: [
+        {
+          text: 'Open',
+          handler: () => {
+            window.open(this.scanResult, '_syatem', 'location=yes');
+          }
+        }
+      ]
+
+    });
+    toast.present();
   }
+
+  
 }
