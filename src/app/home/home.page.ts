@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,27 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  scanActive = false;
+  scanResult = null;
+  @ViewChild('video', { static: false }) video: ElementRef;
 
+  videoElement: any;
+
+  constructor(private toastCtrl: ToastController) {}
+
+ngAfterViewInit(): void {
+  this.videoElement = this.video.nativeElement;
+  
+}
+  startScan(){
+
+  }
+
+  reset(){
+    this.scanResult = null;
+  }
+
+  stopScan(){
+    this.scanActive = false;
+  }
 }
