@@ -7,6 +7,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event)">
+
+  <ion-button expand="full" (click)="captureImage()">
+    <ion-icon slot="start" name="camera"></ion-icon>
+    Capture Image
+  </ion-button>
+
   <ion-button expand="full" (click)="startScan()">
     <ion-icon slot="start" name="qr-code"></ion-icon>
     Start Scan

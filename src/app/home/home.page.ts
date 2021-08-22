@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, Platform, ToastController } from '@ionic/angular';
 import jsQR from 'jsqr';
 
 @Component({
@@ -13,6 +13,7 @@ export class HomePage {
   scanResult = null;
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
+  @ViewChild('fileinput', { static: false }) fileinput: ElementRef;
 
   videoElement: any;
   canvasElement: any;
@@ -20,12 +21,52 @@ export class HomePage {
 
   loading: HTMLIonLoadingElement;
 
-  constructor(private toastCtrl: ToastController, private loadingCtrl: LoadingController) { }
+  constructor(private toastCtrl: ToastController, private loadingCtrl: LoadingController, private platform: Platform) {
+    const isInStandaloneMode = () =>
+      'satandalone' in window.navigator && window.navigator['standalone'];
+
+    if (this.platform.is('ios') && isInStandaloneMode()) {
+
+    }
+  }
 
   ngAfterViewInit(): void {
     this.videoElement = this.video.nativeElement;
     this.canvasElement = this.canvas.nativeElement;
     this.canvasContext = this.canvasElement.getContext('2d');
+  }
+
+
+  captureImage(){
+    this.fileinput.nativeElement.click();
+  }
+
+  handleFile(event: Event){
+    const target = event.target as HTMLInputElement
+    const files = target.files;
+
+    const file = files.item(0);
+
+    var img = new Image();
+    img.onload = () => {
+      this.canvasContext.drawImage(img, 0, 0, this.canvasElement.width, this.canvasElement.height);
+      const imageData = this.canvasContext.getImageData(
+        0,
+        0,
+        this.canvasElement.width,
+        this.canvasElement.height
+      );
+      const code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: 'dontInvert'
+      });
+
+      if (code) {
+        this.scanResult = code.data;
+        this.showQrToast();
+      }
+
+    }; img.src = URL.createObjectURL(file);
+
   }
 
 
@@ -82,7 +123,7 @@ export class HomePage {
         this.showQrToast();
       }
       else {
-        if (this.scanActive){
+        if (this.scanActive) {
           requestAnimationFrame(this.scan.bind(this));
         }
       }
