@@ -18,10 +18,11 @@
   </ion-button>
 
   <video #video [hidden]="!scanActive" width="100%"></video>
+  <canvas #canvas hidden></canvas>
 
   <ion-button expand="full" (click)="stopScan()" color="warning" *ngIf="scanActive">
     <ion-icon slot="start" name="close"></ion-icon>
-    Stop
+    Stop Scan
   </ion-button>
 
 <ion-card *ngIf="scanResult">
