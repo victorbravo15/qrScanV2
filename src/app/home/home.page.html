@@ -7,6 +7,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
+  <ion-item>
+    <ion-input type="text" placeholder="MY QR Code data" [(ngModel)]="qrData">
+    </ion-input>
+  </ion-item>
+
+  <ngx-qrcode [elementType]="elementType" [value]="qrData" qrc-class="my-code">
+  </ngx-qrcode>
   <input #fileinput type="file" accept="image/*;capture=camera" hidden (change)="handleFile($event)">
 
   <ion-button expand="full" (click)="captureImage()">

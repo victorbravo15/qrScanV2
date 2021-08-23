@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
+import { NgxQrcodeElementTypes } from '@techiediaries/ngx-qrcode';
 import jsQR from 'jsqr';
 
 @Component({
@@ -19,6 +20,9 @@ export class HomePage {
   canvasElement: any;
   canvasContext: any;
 
+  qrData = 'https://apps.stulztecnivel.com/STAllInOne/';
+  elementType: NgxQrcodeElementTypes.URL | NgxQrcodeElementTypes.CANVAS | NgxQrcodeElementTypes.IMG = NgxQrcodeElementTypes.CANVAS;
+  
   loading: HTMLIonLoadingElement;
 
   constructor(private toastCtrl: ToastController, private loadingCtrl: LoadingController, private platform: Platform) {
